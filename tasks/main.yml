@@ -1,0 +1,67 @@
+---
+- name: Install apache2
+  apt:
+     name: apache2
+     state: latest
+
+- name: Install perl modules
+  apt:
+      name: "{{ item }}"
+      state: present
+  with_items:
+          - libxml-simple-perl
+          - libcompress-zlib-perl
+          - libdbi-perl
+          - libdbd-mysql-perl
+          - libapache-dbi-perl
+          - libnet-ip-perl
+          - libsoap-lite-perl
+          - libarchive-zip-perl
+          - make 
+          - build-essential
+          - php-pclzip
+          - php7.0
+          - libapache2-mod-php7.0
+          - php7.0-common
+          - php-pear
+          - php7.0-cli
+          - php7.0-ldap
+          - libxml-simple-perl
+          - libio-compress-lzma-perl
+          - php7.0-gd
+          - php7.0-curl
+          - php-soap
+          - libsoap-lite-perl
+          - libmojolicious-perl
+          - libplack-perl
+          - php-mbstring
+          - php-zip
+
+# - name: enable Mod_perl
+#   apache2_module: 
+#         name: mod_perl
+#        state: present
+
+- name: restart apache2
+  service:
+          name: apache2
+          state: restarted
+
+
+- name: Install MySQL
+  apt:
+     name: "{{ item }}"
+     state: present
+  with_items:
+      - mysql-server
+      - php7.0-mysql
+
+
+- name: Untar OCS NG tar file
+  unarchive:
+          src: OCSNG_UNIX_SERVER_2.6.tar.gz
+          dest: /tmp/OCSNG
+       
+          
+- name: Run the OCS setup.sh file       
+  script: /tmp/OCSNG/OCSNG_UNIX_SERVER_2.6/setup.sh
